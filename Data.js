@@ -1,11 +1,21 @@
 const { faker } = require('@faker-js/faker');
-const uuid = require('uuid');
+const lookup = require('country-code-lookup');
 
 function createRandomUser() {
   const courseEnrollment = {
     type: faker.helpers.arrayElements(['classroom', 'online'])[0],
     courseName: faker.helpers.arrayElement(['AI/ML', 'IoT', 'Web Development', 'Android Development'])
   };
+  
+  const continentName = faker.helpers.arrayElement(['Asia','Africa','NorthAmerica','SouthAmerica','Europe','Australia']);
+
+   const countryCode = faker.location.countryCode();
+
+//    console.log(countryCode);
+
+  const data = lookup.byIso(countryCode);
+
+//   console.log(data);
 
   return {
     userId: faker.string.uuid(),
@@ -16,6 +26,8 @@ function createRandomUser() {
     birthdate: faker.date.birthdate(),
     registeredAt: faker.date.past(),
     courseEnrollment: courseEnrollment,
+    country: data.country,
+    continent: data.continent,
   };
 }
 
