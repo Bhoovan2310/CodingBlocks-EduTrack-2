@@ -2,7 +2,9 @@ const express = require('express');
 const users = require('./Data');
 const app = express();
 
-app.get('/',(req,res)=>{
+app.use(express.static('public'));
+
+app.get('/users',(req,res)=>{
      res.send(users);
 });
 
