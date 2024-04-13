@@ -8,6 +8,10 @@ app.get('/users',(req,res)=>{
      res.send(users);
 });
 
+app.get('/all',(req,res)=>{
+    res.json(users);
+})
+
 app.listen(4000,()=>{
     console.log("Server Started at port 4000");
 })

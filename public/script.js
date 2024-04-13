@@ -1,107 +1,98 @@
-fetch('/users')
-  .then(response => response.json())
-  .then(data => {
-    renderPieChartByCourseType(data);
-    renderPieChartByCountry(data);
-  })
-  .catch(error => console.error('Error fetching user data:', error));
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch USERS data from the server
+    fetch('/all')
+        .then(response => response.json())
+        .then(userData => {
+            createContinentPieChart(userData);
+            createCoursePieChart(userData);
+        })
+        .catch(error => console.error('Error fetching user data:', error));
+});
 
-function renderPieChartByCourseType(data) {
-  const courseTypeCounts = data.reduce((acc, user) => {
-    acc[user.courseEnrollment.type] = (acc[user.courseEnrollment.type] || 0) + 1;
-    return acc;
-  }, {});
+// Function to create pie chart for continents
+function createContinentPieChart(userData) {
+    const continents = {};
+    userData.forEach(user => {
+        if (!continents[user.continent]) {
+            continents[user.continent] = 0;
+        }
+        continents[user.continent]++;
+    });
 
-  const pieData = Object.entries(courseTypeCounts).map(([type, count]) => ({
-    type,
-    count,
-  }));
+    // Create pie chart using D3.js
+    const width = 400;
+    const height = 400;
+    const radius = Math.min(width, height) / 2;
 
-  renderPieChart('#pie-chart-course-type', pieData);
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const svg = d3.select('#pie-chart-country')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transform', `translate(${width / 2},${height / 2})`);
+
+    const pie = d3.pie()
+        .value(d => d[1]);
+
+    const arcs = pie(Object.entries(continents));
+
+    const arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+    svg.selectAll('path')
+        .data(arcs)
+        .enter()
+        .append('path')
+        .attr('d', arc)
+        .attr('fill', (d, i) => color(i))
+        .append('title')
+        .text(d => `${d.data[0]}: ${d.data[1]}`);
 }
 
-function renderPieChartByCountry(data) {
-  const countsByCountry = data.reduce((acc, user) => {
-    const country = user.country || 'Unknown';
-    const continent = user.continent || 'Unknown';
-    if (!acc[continent]) {
-      acc[continent] = {};
-    }
-    if (!acc[continent][country]) {
-      acc[continent][country] = { classroom: 0, online: 0, total: 0 };
-    }
-    acc[continent][country][user.courseEnrollment.type]++;
-    acc[continent][country].total++;
-    return acc;
-  }, {});
+// Function to create pie chart for courses
+function createCoursePieChart(userData) {
+    const courses = {};
+    userData.forEach(user => {
+        user.courseEnrollment.Details.forEach(course => {
+            if (!courses[course.name]) {
+                courses[course.name] = 0;
+            }
+            courses[course.name]++;
+        });
+    });
 
-  const pieData = [];
+    // Create pie chart using D3.js
+    const width = 400;
+    const height = 400;
+    const radius = Math.min(width, height) / 2;
 
-  for (const continent in countsByCountry) {
-    for (const country in countsByCountry[continent]) {
-      const count = countsByCountry[continent][country];
-      const total = count.total;
-      const classroomPercentage = total > 0 ? (count.classroom / total) * 100 : 0;
-      const onlinePercentage = total > 0 ? (count.online / total) * 100 : 0;
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-      pieData.push({
-        continent,
-        country,
-        classroomPercentage: classroomPercentage.toFixed(2), // Format percentage
-        onlinePercentage: onlinePercentage.toFixed(2),
-      });
-    }
-  }
+    const svg = d3.select('#pie-chart-course-type')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transform', `translate(${width / 2},${height / 2})`);
 
-  renderPieChart('#pie-chart-country', pieData);
-}
+    const pie = d3.pie()
+        .value(d => d[1]);
 
-function renderPieChart(selector, data) {
-  const width = 400;
-  const height = 400;
-  const radius = Math.min(width, height) / 2;
+    const arcs = pie(Object.entries(courses));
 
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
 
-  const svg = d3.select(selector)
-    .append('svg')
-    .attr('width', width)
-    .attr('height', height)
-    .append('g')
-    .attr('transform', `translate(<span class="math-inline">\{width / 2\},</span>{height / 2})`);
-
-  const pie = d3.pie()
-    .value(d => d.count || d.classroomPercentage); // Use count or percentage
-
-  const arcs = pie(data);
-
-  const arc = d3.arc()
-    .innerRadius(0)
-    .outerRadius(radius);
-
-  svg.selectAll('path')
-    .data(arcs)
-    .enter()
-    .append('path')
-    .attr('d', arc)
-    .attr('fill', (d, i) => color(i))
-    .attr('stroke', 'white') // Add stroke for better visibility
-    .attr('stroke-width', '2px') // Adjust stroke width for clarity
-    .append('title')
-    .text(d => {
-      const label = d.data.country ? `<span class="math-inline">\{d\.data\.country\} \(</span>{d.data.continent})` : `${d.data.type}`;
-      const value = d.data.count ? d.data.count : `${d.data.classroomPercentage}%`;
-      return `${label}: ${value}`;
-    }); // Improved tooltip text
-
-  // Add legend (optional, provide CSS styles for presentation)
-  const legend = svg.selectAll('.legend')
-    .data(data)
-    .enter()
-    .append('g')
-    .attr('class', 'legend')
-    .attr('transform', (d, i) => `translate(0,${i * 20})`);
-
-  legend.append('rect')
-    .attr('x', width / 2 - 1 )
+    svg.selectAll('path')
+        .data(arcs)
+        .enter()
+        .append('path')
+        .attr('d', arc)
+        .attr('fill', (d, i) => color(i))
+        .append('title')
+        .text(d => `${d.data[0]}: ${d.data[1]}`);
 }
