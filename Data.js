@@ -283,7 +283,7 @@ function createRandomUser() {
  
 //This Essentially Creates the Data.
 const USERS = Array.from({
-    length: 20
+    length: 5
 }, createRandomUser);
 
 module.exports = USERS;
