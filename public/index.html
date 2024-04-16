@@ -1,27 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pie Charts</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="script.js" defer></script> <!-- Include script.js -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
-        body{
-            font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
-  /* font-weight: <weight>; */
-  font-style: normal;
-
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>CodingBlocks-EduTrack | Data Visualization Project</title>
 </head>
 <body>
-    <div id="pie-chart-course-type"></div>
-    <div id="pie-chart-country"></div>
-   <a href="/students"><button>Display Studen'ts data</button></a> 
+    <nav>
+        <div class="nav__logo"><a href="#">CodingBlocks-EduTrack</a></div>
+        <ul class="nav__links">
+            <li class="link"><a href="https://codingblocks.com/" target="_blank">Home</a></li>
+            <li class="link"><a href="https://codingblocks.com/aboutus.html" target="_blank">About Us</a></li>
+            <li class="link"><a href="https://online.codingblocks.com/courses" target="_blank">Courses</a></li>
+            <li class="link"><a href="https://blog.codingblocks.com/" target="_blank">Blog</a></li>
+            <li class="link"><a href="/students" class="btn btn-custom">Display Students' Data</a></li>
+        </ul>
+    </nav>
+    <section class="container">
+        <div class="content__container">
+            <h1>
+                Data Visualization<br />
+                <span class="heading__1">for Education Tracking</span>
+            </h1>
+            <p>
+               <h6 id="studentCount">Total Student's Registered Till Now: <span id="count">0</span>+</h6>
+            </p>
+            <a href="/dash.html"><button type="button" class="btn btn-info" style="border-radius: 5%; box-shadow: 2px solid black;">Go To Dashboard</button></a>
+        </div>
+        <div class="image__container">
+            <img src="assets/header-1.jpg" alt="header" />
+            <img src="assets/header-2.jpg" alt="header" />
+            <div class="image__content">
+                <ul>
+                    <li>Unlock your full learning potential</li>
+                    <li>Interactive lessons and virtual classrooms</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        window.onload = function () {
+            var count = 0;
+            var increment = setInterval(function () {
+                count++;
+                document.getElementById('count').innerText = count;
+                if (count >= 100) {
+                    clearInterval(increment);
+                }
+            }, 30); // Change the interval time if needed for a smoother animation
+        };
+    </script>
 </body>
 </html>

@@ -10,6 +10,10 @@ app.get('/users',(req,res)=>{
      res.send(users);
 });
 
+app.get('/dashboard',(req,res)=>{
+    res.render('dashboard');
+})
+
 app.get('/all',(req,res)=>{
     res.json(users);
 })
