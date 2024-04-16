@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             'rgba(75, 192, 192, 0.5)',
                             'rgba(153, 102, 255, 0.5)',
                             'rgba(255, 159, 64, 0.5)'
-                            // Add more colors as needed
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
@@ -73,19 +72,42 @@ document.addEventListener('DOMContentLoaded', function () {
                             'rgba(75, 192, 192, 1)',
                             'rgba(153, 102, 255, 1)',
                             'rgba(255, 159, 64, 1)'
-                            // Add more colors as needed
                         ],
                         borderWidth: 1
                     }]
                 }
             });
 
-            // Display course names and enrollment counts
-            const courseList = document.getElementById('courseList');
-            Object.keys(courseCount).forEach(course => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${course}: ${courseCount[course]} users`;
-                courseList.appendChild(listItem);
+            // Process data to count users per course (for the bar chart)
+            const courseCountForBarChart = {};
+            data.forEach(user => {
+                user.courseEnrollment.Details.forEach(course => {
+                    const courseName = course.name;
+                    courseCountForBarChart[courseName] = (courseCountForBarChart[courseName] || 0) + 1;
+                });
+            });
+
+            // Create bar chart for courses
+            const ctx3 = document.getElementById('courseBarChart').getContext('2d');
+            const courseBarChart = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(courseCountForBarChart),
+                    datasets: [{
+                        label: 'Enrollment by Course',
+                        data: Object.values(courseCountForBarChart),
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)', // Red color for bars
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             });
         })
         .catch(error => console.error('Error fetching data:', error));
