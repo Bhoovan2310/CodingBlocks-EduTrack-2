@@ -1,3 +1,7 @@
+/*
+This file essentially creates the fake data and exports it.
+*/
+
 const {
     faker
 } = require('@faker-js/faker');

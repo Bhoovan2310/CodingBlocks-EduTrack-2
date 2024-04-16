@@ -1,3 +1,7 @@
+/*
+This is the main JavaScript File of Dashboard which creates charts.
+*/
+
 document.addEventListener('DOMContentLoaded', function () {
     fetch('/all')
         .then(response => response.json())

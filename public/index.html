@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
     <title>CodingBlocks-EduTrack | Data Visualization Project</title>
+    <link rel="icon" type="image/jpg" href="/Favicon/favicon.ico">
 </head>
 <body>
+    
+
     <nav>
         <div class="nav__logo"><a href="#">CodingBlocks-EduTrack</a></div>
         <ul class="nav__links">
@@ -18,16 +21,19 @@
             <li class="link"><a href="/students" class="btn btn-custom">Display Students' Data</a></li>
         </ul>
     </nav>
+
+
+   
     <section class="container">
         <div class="content__container">
             <h1>
-                Data Visualization<br />
+                Data Visualization<br/>
                 <span class="heading__1">for Education Tracking</span>
             </h1>
             <p>
                <h6 id="studentCount">Total Student's Registered Till Now: <span id="count">0</span>+</h6>
             </p>
-            <a href="/dash.html"><button type="button" class="btn btn-info" style="border-radius: 5%; box-shadow: 2px solid black;">Go To Dashboard</button></a>
+            <a href="dashboard/dash.html"><button type="button" class="btn btn-info" style="border-radius: 5%; box-shadow: 2px solid black;">Go To Dashboard</button></a>
         </div>
         <div class="image__container">
             <img src="assets/header-1.jpg" alt="header" />
@@ -41,6 +47,8 @@
         </div>
     </section>
 
+
+   
     <script>
         window.onload = function () {
             var count = 0;
@@ -50,7 +58,7 @@
                 if (count >= 100) {
                     clearInterval(increment);
                 }
-            }, 30); // Change the interval time if needed for a smoother animation
+            }, 30); 
         };
     </script>
 </body>

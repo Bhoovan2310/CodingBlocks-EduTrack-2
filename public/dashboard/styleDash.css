@@ -1,3 +1,7 @@
+/*
+This is the styling file of Dashboard Page.
+*/
+
 
 *{
     margin: 0;
@@ -8,6 +12,11 @@ body {
     margin: 0;
     padding: 0;
     background-color:  #D3C5E5;
+    overflow:auto;
+}
+
+body::-webkit-scrollbar {
+    width: 0; 
 }
 
 .dash {
@@ -21,6 +30,7 @@ body {
 .section{
     display: flex;
     flex-wrap: wrap;
+    overflow: hidden;
 }
 
 @media only screen and (max-width: 768px) {
